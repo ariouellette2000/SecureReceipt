@@ -24,9 +24,12 @@ include 'serverSignIn.php';
 							<header class="major">
 								<h1>Sign In</h1>
                                 <p>Not a member yet? Register <a href="../Registration/register.php"><strong style="color:cadetblue; text-decoration:underline">HERE</strong></a></p>
-                                <?php if(isset($_SESSION["userNewAccount"]) && !(isset($_GET["cancel"]))):?>
-                                    <p>Sign in to your new account.</p>
-                                <?php  endif; ?>
+                                <?php if(isset($_SESSION["userNewRegister"])){?>
+                                    <div class="isa_success" >
+                                        <i class="fa fa-check-circle"></i>
+                                        <?php echo 'Your account has been created. Please sign in. ';?>
+                                    </div>
+                                <?php } ?>
                                 <?php if(isset($_GET['sendEmail'])):?>
                                     <p><?PHP echo $_GET['sendEmail'];?></p>
                                 <?php  elseif(isset($_GET['adminType'])):?>
@@ -43,12 +46,11 @@ include 'serverSignIn.php';
 											<div class="row gtr-uniform">
 												<div class="col-12 col-12-xsmall">
                                                     <h5 class="TitleForm">Email :</h5>
-                                                    <?php if(isset($_SESSION["userNewAccount"])  && !(isset($_GET["cancel"]))):?>
-                                                        <input type="email" name="email" id="email" value="" placeholder="Email"
-                                                               title="Email" required oninvalid="setCustomValidity('Email is invalid')" oninput="setCustomValidity('')"/>
-                                                    <?php else:?>
-                                                    <input type="email" name="email" id="email" value="" placeholder="Email" required oninvalid="setCustomValidity('Password is invalid')" oninput="setCustomValidity('')"/>
-                                                    <?php  endif; ?>
+                                                    <?php if(isset($_SESSION["userNewRegister"])){?>
+                                                        <input type="email" name="email" id="email" value="<?php echo $_SESSION["userNewRegister"];?>" placeholder="Email" required oninvalid="setCustomValidity('Email is invalid')" oninput="setCustomValidity('')"/>
+                                                    <?php }else{ ?>
+                                                        <input type="email" name="email" id="email" value="" placeholder="Email" required oninvalid="setCustomValidity('Email is invalid')" oninput="setCustomValidity('')"/>
+                                                    <?php } ?>
                                                 </div>
 												<div class="col-11 col-11-xsmall">
                                                     <h5 class="TitleForm">Password :</h5>
@@ -84,7 +86,7 @@ include 'serverSignIn.php';
 												<!-- Break -->
 												<div class="col-12">
 													<ul class="customActions">
-                                                        <li><button type="submit" value="SignIn" class="primary" name="signIn_user">Sign In</button></li>
+                                                        <li><button type="submit" value="SignIn" class="primary" name="submitSignIn">Sign In</button></li>
                                                         <li><button type="reset" value="Cancel" onclick="goBack()">Cancel</button></li>
                                                         <script language='javascript' type='text/javascript'>
                                                             function goBack() {

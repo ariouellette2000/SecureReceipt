@@ -7,7 +7,7 @@ $email    = "";
 $errors = array();
 
 // Connect to the database
-$db = mysqli_connect('localhost','root','','photography');
+$db = mysqli_connect('localhost','root','','receipts');
 
 // REGISTER USER
 if (isset($_POST['reg_user_button'])) {
@@ -17,16 +17,15 @@ if (isset($_POST['reg_user_button'])) {
     $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
     $firstName = mysqli_real_escape_string($db, $_POST['firstName']);
     $lastName = mysqli_real_escape_string($db, $_POST['lastName']);
-    $currentDate = date("Y-m-d");
 
 
     // Form validation: ensure that the form is correctly filled ...
     // by adding (array_push()) corresponding error unto $errors array
-    if (empty($email)) { array_push($errors, "Email "); }
-    if (empty($password_1)) { array_push($errors, "Password "); }
-    if (empty($password_2)) { array_push($errors, "Confirm Password "); }
-    if (empty($firstName)) { array_push($errors, "First Name "); }
-    if (empty($lastName)) { array_push($errors, "Last Name "); }
+    if (empty($email)) { array_push($errors, "Email is required. "); }
+    if (empty($password_1)) { array_push($errors, "Password is required. "); }
+    if (empty($password_2)) { array_push($errors, "Confirm Password is required. "); }
+    if (empty($firstName)) { array_push($errors, "First Name is required. "); }
+    if (empty($lastName)) { array_push($errors, "Last Name is required. "); }
 
     // First check the database to make sure
     // a user does not already exist with the same username and/or email
@@ -36,7 +35,7 @@ if (isset($_POST['reg_user_button'])) {
 
     if ($user) { // if user exists
         if ($user['userId'] === $email) {
-            array_push($errors, "Email already exists");
+            array_push($errors, "Email already exists. ");
         }
     }
 
@@ -56,9 +55,8 @@ if (isset($_POST['reg_user_button'])) {
 
 
         if (mysqli_affected_rows($db) >= 1) {
-            echo 'in db';
-            $_SESSION['userNewAccount'] = $email;
-//            header('location: ../SignIn/signIn.php');
+            $_SESSION['userNewRegister'] = $email;
+            header('location: ../SignIn/signIn.php');
         }
     }
 }

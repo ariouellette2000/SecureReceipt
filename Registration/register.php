@@ -1,4 +1,4 @@
-<?php include 'addRegistration.php';
+<?php include 'serverRegistration.php';
 
 if(!isset($_SESSION['userSignIn'])){?>
 
@@ -142,6 +142,5 @@ if(!isset($_SESSION['userSignIn'])){?>
 	</body>
 </html>
 <?php }else{
-    header('location: ../../Website/SignOut/signOut.php');
+    header('location: ../SignOut/signOut.php');
 }?>
-
