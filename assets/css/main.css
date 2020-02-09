@@ -3750,10 +3750,6 @@ ul.customActions2 {
 						margin-top: 1.25rem;
 					}
 
-				#header > nav {
-					display: none;
-				}
-
 				#header > .navPanelToggle {
 					display: block;
 					right: 1rem;
