@@ -37,7 +37,7 @@ if (isset($_POST['submitSignIn'])) {
         if (password_verify($saltedPassword, $user['userPassword'])){
                 $_SESSION['userNewSignIn'] = $email;
                 unset($_SESSION['userNewRegister']);
-//                header('location: ../Home/homepage.php');
+                header('location: ../Home/homepage.php');
             }
             else{
                 array_push($errors, "Password is invalid. ");
@@ -46,5 +46,4 @@ if (isset($_POST['submitSignIn'])) {
 }
  }else{
    header('location: ../SignOut/signOut.php');
-    $_SESSION['userNewSignIn']='ojn';
 }?>
