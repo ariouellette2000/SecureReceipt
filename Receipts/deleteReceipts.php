@@ -6,14 +6,14 @@ $imgId = $_GET['idImageDelete'];
 include '../Header/sessionConnection.php';
 
 // Connect to the database
-$db = mysqli_connect('localhost','root','','photography');
+$db = mysqli_connect('localhost','root','','receipts');
 
 // Find path of file
-$path_get_query = "SELECT * FROM gallery WHERE galleryId='$imgId'";
+$path_get_query = "SELECT * FROM upload_receipts WHERE uploadId='$imgId'";
 $result = mysqli_query($db, $path_get_query);
 $path = mysqli_fetch_assoc($result);
 
-$file_pointer = $path['galleryImage'];
+$file_pointer = $path['uploadImage'];
 
 // Use unlink() function to delete a file
     if (!unlink($file_pointer)) {
@@ -22,8 +22,8 @@ $file_pointer = $path['galleryImage'];
     else {
 
 //  Delete image in the database
-        $queryGallery = "DELETE FROM gallery WHERE galleryId = '$imgId'";
-        mysqli_query($db, $queryGallery);
-        header('location: ./viewReceipts.php?categorySelect='.$_GET["categorySelect"].'&subCategorySelect='.$_GET["subCategorySelect"]);
+        $queryDeleteUpload = "DELETE FROM upload_receipts WHERE uploadId = '$imgId'";
+        mysqli_query($db, $queryDeleteUpload);
+        header('location: ./viewReceipts.php?categorySelect='.$_GET["categorySelect"]);
     }
 ?>
