@@ -75,8 +75,30 @@ if(isset($_POST["submitImage"])) {
                 $name = "uploads/" . $fileName;
 
 
+
+// Encryption
+// Cipher method used
+                $cipherMethod = "AES-128-CTR";
+
+// Use OpenSSl Encryption method
+                $nonce_length = openssl_cipher_iv_length($cipherMethod);
+                $options = 0;
+
+// Initialization Vector or Nonce used later with secret key
+                $nonce = '1234567891011121';
+
+// Encryption key
+                $encryption_key = "GeeksforGeeks";
+                //generate with openssl_random_pseudo_bytes
+
+// Use openssl_encrypt() function to encrypt the data
+                $encryption = openssl_encrypt($name, $cipherMethod,
+                    $encryption_key, $options, $nonce);
+
+
+
                 if (count($errors) == 0) {
-                    $queryImage = "INSERT INTO upload_receipts (uploadCaption, uploadCategory, uploadImage) VALUES('$caption_form','$category_form','$name')";
+                    $queryImage = "INSERT INTO upload_receipts (uploadCaption, uploadCategory, uploadImage) VALUES('$caption_form','$category_form','$encryption')";
                     mysqli_query($db, $queryImage);
                 }
                 if (mysqli_affected_rows($db) >= 1) {

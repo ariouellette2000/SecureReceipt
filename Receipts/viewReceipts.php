@@ -60,7 +60,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 $upload_result_cat_name = mysqli_query($db, $upload_cat_name_query);
                 if (mysqli_num_rows($upload_result_cat_name) > 0) {
                     while ($upload_cat = mysqli_fetch_assoc($upload_result_cat_name)) {
-                        $categoriesChoices[] = $upload_cat['uploadCategory'];
+                        $categoriesChoices[] =$upload_cat['uploadCategory'];
                     }
                 }
                 ?>
@@ -154,7 +154,30 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 if (mysqli_affected_rows($db) >= 1) {
                     // Loop through all images
                     while ($gallery = mysqli_fetch_assoc($gallery_result)) {
-                        $images[] = $gallery['uploadImage'];
+
+                        $encrypt_image = $gallery['uploadImage'];
+
+                        //Decryption
+                        // Cipher method used
+                        $cipherMethod = "AES-128-CTR";
+
+                        // Use OpenSSl Encryption method
+                        $nonce_length = openssl_cipher_iv_length($cipherMethod);
+                        $options = 0;
+
+                        // Initialization Vector or Nonce used later with secret key
+                        $nonce = '1234567891011121';
+
+                        // Encryption key
+                        $decryption_key = "GeeksforGeeks";
+                        //generate with openssl_random_pseudo_bytes
+
+                        // Use openssl_decrypt() function to decrypt the data
+                        $decryption = openssl_decrypt ($encrypt_image, $cipherMethod,
+                            $decryption_key, $options, $nonce);
+
+
+                        $images[] = $decryption;
                         $ids[] = $gallery['uploadId'];
                         $captions[] = $gallery['uploadCaption'];
                         $categories[] = $gallery['uploadCategory'];
