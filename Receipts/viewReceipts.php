@@ -64,23 +64,35 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                     }
                 }
                 ?>
-<!--                View receipts category navigation-->
+                <!--                View receipts category navigation-->
                 <div class="row">
-                        <div class="col-8 col-12-small col-12-xsmall" id="dropdownCategory">
-                            <select name="category" id="category" title="Category" required oninvalid="setCustomValidity('Category is invalid')" oninput="setCustomValidity('')">
-                                <option value="" selected hidden>-Select a Category-</option>
-                                <?php
-                                if(mysqli_num_rows($upload_result_cat_name)>0){
-                                    foreach ($categoriesChoices as $categoryChoice) {
-                                        ?>
-                                        <option value="<?= $categoryChoice ?>" title="<?= $categoryChoice ?>"><?= $categoryChoice ?></option>
-                                        <?php
-                                    }?>
-                                    <?php
+                    <div class="col-8 col-12-small col-12-xsmall" id="dropdownCategory">
+                        <select name="category" id="category" title="Category" required oninvalid="setCustomValidity('Category is invalid')" oninput="setCustomValidity('')">
+                            <?php
+                            if(isset($_GET['categorySelect'])){
+                                if(isset($_GET['categorySelect']) != "") {?>
+                                    <option value="" selected hidden>-Select a Category-</option>
+                                <?php }
+                            }?>
+                            <?php
+                            if(mysqli_num_rows($upload_result_cat_name)>0){
+                                foreach ($categoriesChoices as $categoryChoice) {
+                                    if(!isset($_GET['categorySelect'])){
+                                       echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
+                                    }else{
+                                        if($_GET['categorySelect'] === $categoryChoice) {
+                                            echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '" selected>' . $categoryChoice . '</option>';
+                                        }else{
+                                                echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
+                                        }
+                                        }
                                 }?>
-                                <option value="Other" title="Other">Other</option>
-                            </select>
+                                <?php
+                            }?>
+                            <option value="Other" title="Other">Other</option>
+                        </select>
                     </div>
+                </div>
 <!--                    End of receipts category dropdown-->
 
             </header>
@@ -95,23 +107,12 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                     <!--                     Modal Content (The Image) -->
                     <img class="modal-content" id="img01">
                     <div id="caption"></div>
-                    <?php if (isset($_SESSION['userNewSignIn'])) { ?>
                         <!--                     Modal Caption (Image Text) -->
                         <div id="deleteButton">
                             <button style="width:30%;border:1px solid white; color:white;background-color: transparent;"
                                     id="deleteImg" class="reset" value="deleteImg">Delete
                             </button>
                         </div>
-                    <?php } else { ?>
-                        <div id="buttons" style="text-align: center">
-                            <button style="width:20%;border-style:none; color:white;background-color: transparent;font-size:30px;"
-                                    id="previousImg" class="reset" value="previousImg">&#8592;
-                            </button>
-                            <button style="width:20%;border-style:none; color:white;background-color: transparent;font-size:30px;"
-                                    id="nextImg" class="reset" value="nextImg">&#8594;
-                            </button>
-                        </div>
-                    <?php } ?>
                 </div>
 
 

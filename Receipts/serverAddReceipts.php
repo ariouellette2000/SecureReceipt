@@ -12,7 +12,7 @@ $db = mysqli_connect('localhost','root','','receipts');
 if(isset($_POST["submitImage"])) {
 
     // Caption & Category
-    if($_POST["newCategory"]){
+    if(isset($_POST["newCategory"])){
         $category_form = mysqli_real_escape_string($db, $_POST['newCategory']);
     }else {
         $category_form = mysqli_real_escape_string($db, $_POST['category']);
