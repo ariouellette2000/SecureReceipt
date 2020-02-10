@@ -24,36 +24,36 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 <div id="main">
     <div class="wrapper">
         <div class="inner">
-            <a href="addReceipts.php"><span>&#43</span> Add Receipts</a>
             <!-- Elements -->
             <header class="major">
                 <h1>Receipts</h1>
-                
-<!--                Button go back to the top-->
+
+                <!--                Button go back to the top-->
                 <button onclick="topFunction()" id="myBtn" title="Go to top" class="fa fa-angle-double-up"></button>
                 <script>
-                mybutton = document.getElementById("myBtn");
+                    alert('1');
+                    mybutton = document.getElementById("myBtn");
 
-                // When the user scrolls down 20px from the top of the document, show the button
-                window.onscroll = function() {scrollFunction()};
+                    // When the user scrolls down 20px from the top of the document, show the button
+                    window.onscroll = function() {scrollFunction()};
 
-                function scrollFunction() {
-                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                mybutton.style.display = "block";
-                } else {
-                mybutton.style.display = "none";
-                }
-                }
+                    function scrollFunction() {
+                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                            mybutton.style.display = "block";
+                        } else {
+                            mybutton.style.display = "none";
+                        }
+                    }
 
-                // When the user clicks on the button, scroll to the top of the document
-                function topFunction() {
-                document.body.scrollTop = 0; // For Safari
-                document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-                }
+                    // When the user clicks on the button, scroll to the top of the document
+                    function topFunction() {
+                        document.body.scrollTop = 0; // For Safari
+                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                    }
                 </script>
-<!--                End of button top function-->
+                <!--                End of button top function-->
 
-<!--                Dropdown of category choice-->
+                <!--                Dropdown of category choice-->
                 <?php
                 // Categories
                 $upload_cat_name_query = "SELECT DISTINCT uploadCategory FROM upload_receipts WHERE uploadCategory IS NOT NULL";
@@ -66,7 +66,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 ?>
                 <!--                View receipts category navigation-->
                 <div class="row">
-                    <div class="col-8 col-12-small col-12-xsmall" id="dropdownCategory">
+                    <div class="col-10 col-10-small col-10-xsmall" id="dropdownCategory">
                         <select name="category" id="category" title="Category" required oninvalid="setCustomValidity('Category is invalid')" oninput="setCustomValidity('')">
                             <?php
                             if(isset($_GET['categorySelect'])){
@@ -78,22 +78,25 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                             if(mysqli_num_rows($upload_result_cat_name)>0){
                                 foreach ($categoriesChoices as $categoryChoice) {
                                     if(!isset($_GET['categorySelect'])){
-                                       echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
+                                        echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
                                     }else{
                                         if($_GET['categorySelect'] === $categoryChoice) {
                                             echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '" selected>' . $categoryChoice . '</option>';
                                         }else{
-                                                echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
+                                            echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
                                         }
-                                        }
+                                    }
                                 }?>
                                 <?php
                             }?>
                             <option value="Other" title="Other">Other</option>
                         </select>
                     </div>
+                    <div class="col-2 col-2-small col-2-xsmall" id="dropdownCategory">
+                        <a href="addReceipts.php" class="addReceipts"><span>&#43</span></a>
+                    </div>
                 </div>
-<!--                    End of receipts category dropdown-->
+                <!--                    End of receipts category dropdown-->
 
             </header>
             <div class="row">
@@ -107,19 +110,21 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                     <!--                     Modal Content (The Image) -->
                     <img class="modal-content" id="img01">
                     <div id="caption"></div>
-                        <!--                     Modal Caption (Image Text) -->
-                        <div id="deleteButton">
-                            <button style="width:30%;border:1px solid white; color:white;background-color: transparent;"
-                                    id="deleteImg" class="reset" value="deleteImg">Delete
-                            </button>
-                        </div>
+                    <!--                     Modal Caption (Image Text) -->
+                    <div id="deleteButton">
+                        <button style="width:30%;border:1px solid white; color:white;background-color: transparent;"
+                                id="deleteImg" class="reset" value="deleteImg">Delete
+                        </button>
+                    </div>
                 </div>
 
 
 
-<!--            Verify the category of a receipt directly when the dropdown is changed-->
+
+                <!--            Verify the category of a receipt directly when the dropdown is changed-->
                 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
                 <script>
+                    alert('2');
                     // //Get the category
                     $(document).ready(function () {
                         var value = "";
@@ -131,15 +136,14 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 </script>
 
 
-
-<!--                Loops to display or view all receipts-->
+                <!--                Loops to display or view all receipts-->
                 <?php
                 $categorySelected = '';
                 if (isset($_GET['categorySelect'])) {
                     $categorySelected = $_GET['categorySelect'];
                 }
 
-//                Get all receipts informations from the database
+                //                Get all receipts informations from the database
                 //DECRYPTION
                 if (!($categorySelected === '')) {
                     // Select query for specific gallery elements
@@ -244,69 +248,44 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 ?>
 
 
-
-
                 <script language='javascript' type='text/javascript'>
+                    alert('3');
                     var modal = document.getElementById("myModal");
-
                     // Get the image and insert it inside the modal - use its "alt" text as a caption
                     var modalImg = document.getElementById("img01");
                     var captionText = document.getElementById("caption");
                     var imgs = document.getElementsByTagName("img");
                     var deleteButton = document.getElementById("deleteImg");
-                    var nextButton = document.getElementById('nextImg');
-                    var previousButton = document.getElementById('previousImg');
                     for (var i = 0; i < imgs.length; i++) {
                         var img = document.getElementById(imgs[i].id);
                         var curImageId = "";
                         img.onclick = function () {
-                            var jsnewArrayId = new Array();
-                            var jsnewArrayCaption = new Array();
-                            var jsnewArraySource = new Array();
-                            <?php foreach($ids as $key => $val){ ?>
-                            jsnewArrayId.push('<?php echo $val; ?>');
-                            <?php } ?>
-                            <?php foreach($captions as $key => $val){ ?>
-                            jsnewArrayCaption.push('<?php echo $val; ?>');
-                            <?php } ?>
-                            <?php foreach($images as $key => $val){ ?>
-                            jsnewArraySource.push('<?php echo $val; ?>');
-                            <?php } ?>
-
-
 
                             modal.style.display = "block";
                             modalImg.src = this.src;
                             var altText = this.alt;
-                            var category = this.getAttribute("name");
 
-                            captionText.innerHTML = altText
-                                <?php if(isset($_SESSION['userNewSignIn'])):?>
-                                + '&nbsp;' +
-                                '<a href="./modifyImageForm.php?modificationId=' + this.id +
-                                '&categorySelect=' + category +
-                                '"' + 'class="pencil"><i class="fa fa-pencil"></i></a>'
-                                <?php endif; ?>;
+                            // captionText.innerHTML = altText;
                             curImageId = this.id;
 
 
-                                //Delete a receipt
-                                deleteButton.onclick = function () {
-                                    var clicked_id = curImageId;
-                                    var typeOfPage = "viewReceipt";
-                                    var categorySelect = "";
-                                    var subCategorySelect = "";
-                                    <?php if(!isset($_GET["categorySelect"])){?>
-                                        mscConfirm(typeOfPage, categorySelect, subCategorySelect, clicked_id, "Delete?", function () {
-                                            mscAlert("Post deleted");
-                                        });
-                                    <?php }else{?>
-                                         categorySelect = "<?php echo $_GET["categorySelect"];?>";
-                                        mscConfirm(typeOfPage, categorySelect, subCategorySelect, clicked_id, "Delete?", function () {
-                                            mscAlert("Post deleted");
-                                        });
-                                    <?php } ?>
-                                };
+                            //Delete a receipt
+                            deleteButton.onclick = function () {
+                                var clicked_id = curImageId;
+                                var typeOfPage = "viewReceipt";
+                                var categorySelect = "";
+                                var subCategorySelect = "";
+                                <?php if(!isset($_GET["categorySelect"])){?>
+                                mscConfirm(typeOfPage, categorySelect, subCategorySelect, clicked_id, "Delete?", function () {
+                                    mscAlert("Post deleted");
+                                });
+                                <?php }else{?>
+                                categorySelect = "<?php echo $_GET["categorySelect"];?>";
+                                mscConfirm(typeOfPage, categorySelect, subCategorySelect, clicked_id, "Delete?", function () {
+                                    mscAlert("Post deleted");
+                                });
+                                <?php } ?>
+                            };
                         };
                     }
 

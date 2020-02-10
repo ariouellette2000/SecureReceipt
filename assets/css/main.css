@@ -140,7 +140,7 @@ input, select, textarea {
 	}
 
 	body, input, select, textarea {
-		font-family: adobe-caslon-pro, "Levo";
+		font-family: Monospace, "Levo";
 		font-weight: 300;
 		font-size: 1rem;
 		line-height: 2.15;
@@ -4650,15 +4650,41 @@ input:disabled {
 	z-index: 99; /* Make sure it does not overlap */
 	border: none; /* Remove borders */
 	outline: none; /* Remove outline */
-	background-color: cadetblue; /* Set a background color */
+	background-color: #f45a52; /* Set a background color */
 	color: black; /* Text color */
 	cursor: pointer; /* Add a mouse pointer on hover */
 	padding: 15px; /* Some padding */
 	border-radius: 10px; /* Rounded corners */
 	font-size: 18px; /* Increase font size */
-	opacity :0.64; /* Transparency of background */
+	/*opacity :0.64; !* Transparency of background *!*/
 }
 
 #myBtn:hover {
 	background-color: rgba(129, 127, 125, 0.64); /* Add a dark-grey background on hover */
 }
+
+.addReceipts{
+	font-size:150%;
+	background-color: #dfb516;
+	padding: 8% 15.2% 8% 15.2%;
+	border-radius: 100%;
+	color:black;
+}
+
+.addReceipts:hover{
+	opacity: 0.8;
+}
+
+#nav ul li a:hover{
+	color: #f45a52;
+}
+.imgGallery:hover{
+	box-shadow: 1px 1px 5px 5px lightgrey;
+}
+select, input[type="text"], input[type="email"], input[type="password"]
+{
+	background-color: lightgrey;
+}
+
+
+

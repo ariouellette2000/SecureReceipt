@@ -9,7 +9,7 @@ $db = mysqli_connect('localhost','root','','photography');
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Vanilla Picture</title>
+    <title>Home</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="description" content="" />
@@ -27,8 +27,8 @@ $db = mysqli_connect('localhost','root','','photography');
             <h1 class="heading alt">Secureceipt</h1>
             <p>One safety location for all your receipts.</p>
 
-            <div class="image fit special video">
-                <img src="../../images/homepage_frontcover.jpg" alt="" />
+            <div class="img fit special video">
+                <img src="../images/safety.jpg" alt="" style="width:80%"/>
             </div>
             <ul class="feature-icons">
                 <li><a href=https://www.instagram.com/vanilla_picture/?hl=fr-ca" class="a_socialMedia"><span class="icon fa-instagram"></span><span class="label">Instagram</span></a></li>

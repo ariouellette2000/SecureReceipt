@@ -23,7 +23,7 @@ include 'serverSignIn.php';
 						<!-- Elements -->
 							<header class="major">
 								<h1>Sign In</h1>
-                                <p>Not a member yet? Register <a href="../Registration/register.php"><strong style="color:cadetblue; text-decoration:underline">HERE</strong></a></p>
+                                <p>Not a member yet? Register <a href="../Registration/register.php"><strong style="color: #dfb516; text-decoration:underline">HERE</strong></a></p>
                                 <?php if(isset($_SESSION["userNewRegister"])){?>
                                     <div class="isa_success" >
                                         <i class="fa fa-check-circle"></i>
