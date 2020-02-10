@@ -4686,5 +4686,17 @@ select, input[type="text"], input[type="email"], input[type="password"]
 	background-color: lightgrey;
 }
 
+#deleteImg{
+	width:30%;
+	border:1px solid white;
+	color:white;
+	background-color: transparent; !important;
+}
+
+#deleteImg:hover{
+	color: #f45a52;
+	border:1px solid #f45a52;
+}
+
 
 

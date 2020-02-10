@@ -31,7 +31,6 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 <!--                Button go back to the top-->
                 <button onclick="topFunction()" id="myBtn" title="Go to top" class="fa fa-angle-double-up"></button>
                 <script>
-                    alert('1');
                     mybutton = document.getElementById("myBtn");
 
                     // When the user scrolls down 20px from the top of the document, show the button
@@ -89,7 +88,6 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                                 }?>
                                 <?php
                             }?>
-                            <option value="Other" title="Other">Other</option>
                         </select>
                     </div>
                     <div class="col-2 col-2-small col-2-xsmall" id="dropdownCategory">
@@ -112,7 +110,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                     <div id="caption"></div>
                     <!--                     Modal Caption (Image Text) -->
                     <div id="deleteButton">
-                        <button style="width:30%;border:1px solid white; color:white;background-color: transparent;"
+                        <button style="background-color: transparent;"
                                 id="deleteImg" class="reset" value="deleteImg">Delete
                         </button>
                     </div>
@@ -124,7 +122,6 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 <!--            Verify the category of a receipt directly when the dropdown is changed-->
                 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
                 <script>
-                    alert('2');
                     // //Get the category
                     $(document).ready(function () {
                         var value = "";
@@ -173,7 +170,17 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                         $nonce = '1234567891011121';
 
                         // Encryption key
-                        $decryption_key = "GeeksforGeeks";
+
+                        //Get password in database
+                        $email = $_SESSION['userNewSignIn'];
+                        $user_password_query = "SELECT userPassword FROM receipts WHERE userId = '$email'";
+                        $user_result_password = mysqli_query($db, $user_password_query);
+                        if (mysqli_num_rows($user_result_password) > 0) {
+                            while ($user_pw = mysqli_fetch_assoc($user_result_password)) {
+                                $passwordDb =$user_pw['userPassword'];
+                            }
+                        }
+                        $decryption_key = $passwordDb;
                         //generate with openssl_random_pseudo_bytes
 
                         // Use openssl_decrypt() function to decrypt the data
@@ -249,7 +256,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 
 
                 <script language='javascript' type='text/javascript'>
-                    alert('3');
+
                     var modal = document.getElementById("myModal");
                     // Get the image and insert it inside the modal - use its "alt" text as a caption
                     var modalImg = document.getElementById("img01");

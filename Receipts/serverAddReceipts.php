@@ -88,7 +88,16 @@ if(isset($_POST["submitImage"])) {
                 $nonce = '1234567891011121';
 
 // Encryption key
-                $encryption_key = "GeeksforGeeks";
+                // Get the password from the database
+                $email = $_SESSION['userNewSignIn'];
+                $user_password_query = "SELECT userPassword FROM receipts WHERE userId = '$email'";
+                $user_result_password = mysqli_query($db, $user_password_query);
+                if (mysqli_num_rows($user_result_password) > 0) {
+                    while ($user_pw = mysqli_fetch_assoc($user_result_password)) {
+                        $passwordDb =$user_pw['userPassword'];
+                    }
+                }
+            $encryption_key = $passwordDb;
                 //generate with openssl_random_pseudo_bytes
 
 // Use openssl_encrypt() function to encrypt the data

@@ -1,6 +1,6 @@
 <?php include 'serverRegistration.php';
 
-if(!isset($_SESSION['userSignIn'])){?>
+if(!isset($_SESSION['userNewSignIn'])){?>
 
 <!DOCTYPE HTML>
 <html lang="en">
