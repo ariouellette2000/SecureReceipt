@@ -1,0 +1,38 @@
+GOAL:
+    In a few sentences, this website is used to store receipts and categorize them.
+    Making sure every user has his/her own receipts in one secure location,
+    thus, in the future when an item breaks or it's taxes times,
+    all related receipts are easily found.
+
+STRUCTURE:
+    1) Registration - Each user is require to enter some personal information
+                        an a desired password
+    2) Sign In - Each user is require to sign in in order to access any further
+                    information such as the receipts. They have to enter their
+                    username (email) and their already existing password.
+    3) Home - This page is only a welcome page to reassure the client, by presenting
+                the company logo and a bit of a design
+    4) Add Receipt - This page is accessible only if a user is sign in. Every connected
+                        users can add receipts associated to a chosen category
+    5) View Receipts - This page displays in a general view all previously added receipts
+                        associated with the connected user. A zoom option is available
+                        to the user and they can filter by category.
+    6) Sign Out - Each user is able to sign out from the site
+
+
+SECURITY IMPLEMENTATION:
+    1) Hashing - Each user's password is hash after the registration form is
+                    completed. Every time the user sign's in the database password
+                    gets compare with the entered password to verify both fits.
+                 The hash password also contains a salt which is the email of the user
+                 The method use to hash is password_hash
+                 The method use to compare both password is password_verify
+    2) Encryption - Each receipt (image) path is stored in the database as
+                        ciphertext, after the add receipt form is completed. It
+                        is decrypted in the view receipts page.
+                    The path is encrypted using the user's hashed password as the
+                        symmetric key.
+                    In the viewReceipts.php page the path is only decrypt if foreign key
+                        userId is the same as the connected user.
+                    The method use is openssl_encrypt() or openssl_decrypt()
+
