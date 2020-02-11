@@ -9,9 +9,9 @@ $errors = array();
 // Connect to the database
 $db = mysqli_connect('localhost','root','','receipts');
 
-// REGISTER USER
+// Verify if the user has click on the registration button
 if (isset($_POST['reg_user_button'])) {
-    // receive all input values from the form
+    // Receive all input values from the form
     $email = mysqli_real_escape_string($db, $_POST['email']);
     $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
     $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
@@ -33,30 +33,41 @@ if (isset($_POST['reg_user_button'])) {
     $result = mysqli_query($db, $user_check_query);
     $user = mysqli_fetch_assoc($result);
 
-    if ($user) { // if user exists
+    // Verify if users exists
+    if ($user) {
         if ($user['userId'] === $email) {
+            // Pass an error message if the email exist
             array_push($errors, "Email already exists. ");
         }
     }
 
-    // Finally, register user if there are no errors in the form
+    // Register user if there are no errors in the form
     if (count($errors) == 0) {
-        //Hash
-            //Insert a salt
-                $salt = $email;
-                $saltedPassword = $email.$password_1;
-            //Hash the salted PW
-                $hash = password_hash($saltedPassword, PASSWORD_DEFAULT);
+        //Hashing the password
+            $salt = $email; // Initialize salt with the user email
+            $saltedPassword = $salt.$password_1; // Concatenate salt and password to form plaintext
+            $hash = password_hash($saltedPassword, PASSWORD_DEFAULT); // Hash the password,
+                                                                            // PASSWORD_DEFAULT is a constant that uses bcrypt algorithm (60 characters long)
+                                                                            // Also, there is a salt provide in this API but I added a second salt to demonstrate the idea
+                                                                            // If a user wanted to include only one custom salt they would code it the following way:
+                                                                                    //$options = [
+                                                                                    //    'salt' => "Own salt"
+                                                                                    //    'cost' => 12 // the default cost is 10
+                                                                                    //];
+                                                                                    //$hash = password_hash($password, PASSWORD_DEFAULT, $options);
+                                                                            // *It is possible to use stronger algorithm in a more advanced project
+                                                                            // **The second parameter could also be PASSWORD_BCRYPT
 
-         // Insert the user information in the table receipts in the database
+         // Insert the user registration information in the table receipts in the database
          $queryUser = "INSERT INTO receipts (userId, userPassword, userFirstName, userLastName)
             VALUES('$email', '$hash', '$firstName', '$lastName' )";
          mysqli_query($db, $queryUser);
 
 
         if (mysqli_affected_rows($db) >= 1) {
-            $_SESSION['userNewRegister'] = $email;
+            $_SESSION['userNewRegister'] = $email; // Store the user email, to fill the email input in the sign in form
             header('location: ../SignIn/signIn.php');
         }
     }
 }
+

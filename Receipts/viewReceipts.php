@@ -10,9 +10,6 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 <head>
     <title>Receipts</title>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <meta name="description" content=""/>
-    <meta name="keywords" content=""/>
     <link rel="stylesheet" href="../assets/css/main.css"/>
     <link rel="stylesheet" href="../assets/css/gallery.css"/>
 
@@ -24,11 +21,10 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 <div id="main">
     <div class="wrapper">
         <div class="inner">
-            <!-- Elements -->
             <header class="major">
                 <h1>Receipts</h1>
 
-                <!--                Button go back to the top-->
+<!--            Begins button go back to the top-->
                 <button onclick="topFunction()" id="myBtn" title="Go to top" class="fa fa-angle-double-up">Top</button>
                 <script>
                     mybutton = document.getElementById("myBtn");
@@ -50,21 +46,21 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
                     }
                 </script>
-                <!--                End of button top function-->
 
                 <!--                Dropdown of category choice-->
                 <?php
-                $email=$_SESSION['userNewSignIn'];
-                // Categories
-                $upload_cat_name_query = "SELECT DISTINCT uploadCategory, userId FROM upload_receipts WHERE uploadCategory IS NOT NULL AND userId='$email'";
+                // Get the categories from the database to the eventually place it in the dropdown
+                $email = $_SESSION['userNewSignIn']; // Only select the categories associated with the connected user
+                $upload_cat_name_query = "SELECT DISTINCT uploadCategory FROM upload_receipts WHERE uploadCategory IS NOT NULL AND userId = '$email'";
                 $upload_result_cat_name = mysqli_query($db, $upload_cat_name_query);
                 if (mysqli_num_rows($upload_result_cat_name) > 0) {
                     while ($upload_cat = mysqli_fetch_assoc($upload_result_cat_name)) {
-                            $categoriesChoices[] = $upload_cat['uploadCategory'];
+                        $categoriesChoices[] = $upload_cat['uploadCategory']; // Store all categories in a array
                     }
                 }
                 ?>
-                <!--                View receipts category navigation-->
+
+<!--            Category dropdown-->
                 <div class="row">
                     <div class="col-10 col-10-small col-10-xsmall" id="dropdownCategory">
                         <select name="category" id="category" title="Category" required oninvalid="setCustomValidity('Category is invalid')" oninput="setCustomValidity('')">
@@ -80,7 +76,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                             }?>
                             <?php
                             if(mysqli_num_rows($upload_result_cat_name)>0){
-                                foreach ($categoriesChoices as $categoryChoice) {
+                                foreach ($categoriesChoices as $categoryChoice) { // Go through the category array initialize previously
                                     if(!isset($_GET['categorySelect'])){
                                         echo '<option value="' . $categoryChoice . '" title="' . $categoryChoice . '">' . $categoryChoice . '</option>';
                                     }else{
@@ -99,21 +95,16 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                         <a href="addReceipts.php" class="addReceipts"><span>&#43</span></a>
                     </div>
                 </div>
-                <!--                    End of receipts category dropdown-->
-
             </header>
             <div class="row">
-
-                <!--                 The Modal -->
+<!--            The Modal -->
                 <div id="myModal" class="modal">
-
-                    <!--                     The Close Button -->
+<!--                The Close Button -->
                     <span class="closeModal">&times;</span>
-
-                    <!--                     Modal Content (The Image) -->
+<!--                 Modal Content (The Image) -->
                     <img class="modal-content" id="img01">
                     <div id="caption"></div>
-                    <!--                     Modal Caption (Image Text) -->
+<!--                Delete Button -->
                     <div id="deleteButton">
                         <button style="background-color: transparent;"
                                 id="deleteImg" class="reset" value="deleteImg">Delete
@@ -122,38 +113,36 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 </div>
 
 
-
-
-                <!--            Verify the category of a receipt directly when the dropdown is changed-->
+<!--            Verify the category of a receipt directly when the dropdown is changed-->
                 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
                 <script>
-                    // //Get the category
+                    // Create an input type text if the chosen category is "Other"
                     $(document).ready(function () {
                         var value = "";
-                        $("#category").change(function () {
-                            value = $(this).val();
-                            window.location.href= 'viewReceipts.php?categorySelect='+value;
+                        $("#category").change(function () { // Detect if there is any change to the category dropdown
+                            value = $(this).val(); // Store the value of the dorpdown
+                            window.location.href= 'viewReceipts.php?categorySelect='+value; //Reload the page depending on the selected category
                         });
                     });
                 </script>
 
 
-                <!--                Loops to display or view all receipts-->
+<!--            Loops to display or view all receipts-->
                 <?php
+                // Set the selected category
                 $categorySelected = '';
                 if (isset($_GET['categorySelect'])) {
                     $categorySelected = $_GET['categorySelect'];
                 }
 
-                //                Get all receipts informations from the database
-                //DECRYPTION
+                // Get all receipts information from the database
                 $email = $_SESSION['userNewSignIn'];
                 if (!($categorySelected === '')) {
                     // Select query for specific gallery elements
                     $gallery_check_query = "SELECT * FROM upload_receipts WHERE uploadCategory='$categorySelected' AND userId='$email'";
 
                 } else {
-//                         Select query for all gallery elements
+                    // Select query for all gallery elements
                     $gallery_check_query = "SELECT * FROM upload_receipts WHERE userId='$email'";
                 }
                 $gallery_result = mysqli_query($db, $gallery_check_query);
@@ -162,96 +151,82 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                     // Loop through all images
                     while ($gallery = mysqli_fetch_assoc($gallery_result)) {
 
-
-                            $encrypt_image = $gallery['uploadImage'];
+                            $encrypt_image = $gallery['uploadImage']; // Store the encrypted path of the image
 
                             //Decryption
-                            // Cipher method used
-                            $cipherMethod = "AES-128-CTR";
+                                // Include the decryption variables
+                                include '../Cryptography/cryptographyVariables.php';
 
-                            // Use OpenSSl Encryption method
-                            $nonce_length = openssl_cipher_iv_length($cipherMethod);
-                            $options = 0;
+                                // Use openssl_decrypt() function to decrypt the data
+                                $decryption = openssl_decrypt($encrypt_image, $cipherMethod,
+                                    $decryption_key, $options, $nonce);
 
-                            // Initialization Vector or Nonce used later with secret key
-                            $nonce = '1234567891011121';
-
-                            // Encryption key
-
-                            //Get password in database
-                            $email = $_SESSION['userNewSignIn'];
-                            $user_password_query = "SELECT userPassword FROM receipts WHERE userId = '$email'";
-                            $user_result_password = mysqli_query($db, $user_password_query);
-                            if (mysqli_num_rows($user_result_password) > 0) {
-                                while ($user_pw = mysqli_fetch_assoc($user_result_password)) {
-                                    $passwordDb = $user_pw['userPassword'];
-                                }
-                            }
-                            $decryption_key = $passwordDb;
-                            //generate with openssl_random_pseudo_bytes
-
-                            // Use openssl_decrypt() function to decrypt the data
-                            $decryption = openssl_decrypt($encrypt_image, $cipherMethod,
-                                $decryption_key, $options, $nonce);
-
-
+                            // Store all receipts information in arrays
                             $images[] = $decryption;
                             $ids[] = $gallery['uploadId'];
                             $captions[] = $gallery['uploadCaption'];
                             $categories[] = $gallery['uploadCategory'];
                     }
 
+                // Display all receipts images in columns
+                    // Initialize column index
+                    $columnIndex = 1;
+
+                    // Column 1
+                    echo '<div class="column">';
+                    for ($i = 0; $i < count($images); $i++) {
+                        if ($columnIndex > 4) { // Restart index each times it comes to 4
+                            $columnIndex = 1;
+                        }
+                        if ($columnIndex == 1) { // Only display images with the column index 1
+                            echo '<img class="imgGallery" id="' . $ids[$i] . '"src="' . $images[$i] . '" alt="' . $captions[$i] . '" name="' . $categories[$i] .'">';
+                        }
+                        $columnIndex++;
+                    }
+                    echo '</div>';
 
                     // Initialize column index
                     $columnIndex = 1;
 
-                    // Display images
-                    echo '<div class="column 1">';
-
+                    // Column2
+                    echo '<div class="column">';
                     for ($i = 0; $i < count($images); $i++) {
-                        if ($columnIndex > 4) {
+                        if ($columnIndex > 4) { // Restart index each times it comes to 4
                             $columnIndex = 1;
                         }
-                        if ($columnIndex == 1) {
+                        if ($columnIndex == 2) { // Only display images with the column index 2
                             echo '<img class="imgGallery" id="' . $ids[$i] . '"src="' . $images[$i] . '" alt="' . $captions[$i] . '" name="' . $categories[$i] .'">';
                         }
                         $columnIndex++;
                     }
                     echo '</div>';
 
+                    // Initialize column index
                     $columnIndex = 1;
-                    echo '<div class="column">';
-                    for ($i = 0; $i < count($images); $i++) {
-                        if ($columnIndex > 4) {
-                            $columnIndex = 1;
-                        }
-                        if ($columnIndex == 2) {
-                            echo '<img class="imgGallery" id="' . $ids[$i] . '"src="' . $images[$i] . '" alt="' . $captions[$i] . '" name="' . $categories[$i] .'">';
-                        }
-                        $columnIndex++;
-                    }
-                    echo '</div>';
 
-                    $columnIndex = 1;
+                    // Column 3
                     echo '<div class="column">';
                     for ($i = 0; $i < count($images); $i++) {
-                        if ($columnIndex > 4) {
+                        if ($columnIndex > 4) { // Restart index each times it comes to 4
                             $columnIndex = 1;
                         }
-                        if ($columnIndex == 3) {
+                        if ($columnIndex == 3) { // Only display images with the column index 3
                             echo '<img class="imgGallery" id="' . $ids[$i] . '"src="' . $images[$i] . '" alt="' . $captions[$i] . '" name="' . $categories[$i] . '">';
                         }
                         $columnIndex++;
                     }
                     echo '</div>';
 
+                    // Initialize column index
                     $columnIndex = 1;
+
+                    // Column 3
                     echo '<div class="column">';
                     for ($i = 0; $i < count($images); $i++) {
-                        if ($columnIndex > 4) {
+                        if ($columnIndex > 4) { // Restart index each times it comes to 4
                             $columnIndex = 1;
                         }
-                        if ($columnIndex == 4) {
+                        if ($columnIndex == 4) { // Only display images with the column index 4
                             echo '<img class="imgGallery" id="' . $ids[$i] . '"src="' . $images[$i] . '" alt="' . $captions[$i] . '" name="' . $categories[$i] .'">';
                         }
                         $columnIndex++;
@@ -264,36 +239,42 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 
 
                 <script language='javascript' type='text/javascript'>
-
+                // When a user clicked on an image the div modal appears so the image is zoomed
+                    // Get the modal attribute and all images
                     var modal = document.getElementById("myModal");
-                    // Get the image and insert it inside the modal - use its "alt" text as a caption
                     var modalImg = document.getElementById("img01");
                     var captionText = document.getElementById("caption");
                     var imgs = document.getElementsByTagName("img");
                     var deleteButton = document.getElementById("deleteImg");
+
+                    //Go through all images of the gallery
                     for (var i = 0; i < imgs.length; i++) {
+                        // Get the clicked image
                         var img = document.getElementById(imgs[i].id);
                         var curImageId = "";
                         img.onclick = function () {
 
+                            // Use its "alt" text as a caption, the
                             modal.style.display = "block";
-                            modalImg.src = this.src;
-                            var altText = this.alt;
-
-                            // captionText.innerHTML = altText;
-                            curImageId = this.id;
+                            modalImg.src = this.src; // Use its "src" text as the source of the current zoomed image
+                            captionText.innerHTML = this.alt; //  Use its "alt" text as a caption, the
+                            curImageId = this.id; // Use its "id" as the current zoomed image
 
 
-                            //Delete a receipt
+                            // When the user clicks on the delete button in the modal
                             deleteButton.onclick = function () {
                                 var clicked_id = curImageId;
-                                var typeOfPage = "viewReceipt";
+                                var typeOfPage = "viewReceipt"; // Specif the page in case the pop up is used in other pages
                                 var categorySelect = "";
-                                var subCategorySelect = "";
+                                var subCategorySelect = ""; // Additional feature in the future for a sub category
+
+                                // No category selected
                                 <?php if(!isset($_GET["categorySelect"])){?>
                                 mscConfirm(typeOfPage, categorySelect, subCategorySelect, clicked_id, "Delete?", function () {
                                     mscAlert("Post deleted");
                                 });
+
+                                // Selected category
                                 <?php }else{?>
                                 categorySelect = "<?php echo $_GET["categorySelect"];?>";
                                 mscConfirm(typeOfPage, categorySelect, subCategorySelect, clicked_id, "Delete?", function () {
