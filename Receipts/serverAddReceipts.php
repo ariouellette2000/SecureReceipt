@@ -107,7 +107,8 @@ if(isset($_POST["submitImage"])) {
 
 
                 if (count($errors) == 0) {
-                    $queryImage = "INSERT INTO upload_receipts (uploadCaption, uploadCategory, uploadImage) VALUES('$caption_form','$category_form','$encryption')";
+                    $email = $_SESSION['userNewSignIn'];
+                    $queryImage = "INSERT INTO upload_receipts (uploadCaption, uploadCategory, uploadImage, userId) VALUES('$caption_form','$category_form','$encryption','$email')";
                     mysqli_query($db, $queryImage);
                 }
                 if (mysqli_affected_rows($db) >= 1) {

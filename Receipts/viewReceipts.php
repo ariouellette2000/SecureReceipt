@@ -54,12 +54,13 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 
                 <!--                Dropdown of category choice-->
                 <?php
+                $email=$_SESSION['userNewSignIn'];
                 // Categories
-                $upload_cat_name_query = "SELECT DISTINCT uploadCategory FROM upload_receipts WHERE uploadCategory IS NOT NULL";
+                $upload_cat_name_query = "SELECT DISTINCT uploadCategory, userId FROM upload_receipts WHERE uploadCategory IS NOT NULL AND userId='$email'";
                 $upload_result_cat_name = mysqli_query($db, $upload_cat_name_query);
                 if (mysqli_num_rows($upload_result_cat_name) > 0) {
                     while ($upload_cat = mysqli_fetch_assoc($upload_result_cat_name)) {
-                        $categoriesChoices[] =$upload_cat['uploadCategory'];
+                            $categoriesChoices[] = $upload_cat['uploadCategory'];
                     }
                 }
                 ?>
@@ -146,13 +147,14 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 
                 //                Get all receipts informations from the database
                 //DECRYPTION
+                $email = $_SESSION['userNewSignIn'];
                 if (!($categorySelected === '')) {
                     // Select query for specific gallery elements
-                    $gallery_check_query = "SELECT * FROM upload_receipts WHERE uploadCategory='$categorySelected'";
+                    $gallery_check_query = "SELECT * FROM upload_receipts WHERE uploadCategory='$categorySelected' AND userId='$email'";
 
                 } else {
 //                         Select query for all gallery elements
-                    $gallery_check_query = "SELECT * FROM upload_receipts";
+                    $gallery_check_query = "SELECT * FROM upload_receipts WHERE userId='$email'";
                 }
                 $gallery_result = mysqli_query($db, $gallery_check_query);
 
@@ -160,43 +162,45 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                     // Loop through all images
                     while ($gallery = mysqli_fetch_assoc($gallery_result)) {
 
-                        $encrypt_image = $gallery['uploadImage'];
 
-                        //Decryption
-                        // Cipher method used
-                        $cipherMethod = "AES-128-CTR";
+                            $encrypt_image = $gallery['uploadImage'];
 
-                        // Use OpenSSl Encryption method
-                        $nonce_length = openssl_cipher_iv_length($cipherMethod);
-                        $options = 0;
+                            //Decryption
+                            // Cipher method used
+                            $cipherMethod = "AES-128-CTR";
 
-                        // Initialization Vector or Nonce used later with secret key
-                        $nonce = '1234567891011121';
+                            // Use OpenSSl Encryption method
+                            $nonce_length = openssl_cipher_iv_length($cipherMethod);
+                            $options = 0;
 
-                        // Encryption key
+                            // Initialization Vector or Nonce used later with secret key
+                            $nonce = '1234567891011121';
 
-                        //Get password in database
-                        $email = $_SESSION['userNewSignIn'];
-                        $user_password_query = "SELECT userPassword FROM receipts WHERE userId = '$email'";
-                        $user_result_password = mysqli_query($db, $user_password_query);
-                        if (mysqli_num_rows($user_result_password) > 0) {
-                            while ($user_pw = mysqli_fetch_assoc($user_result_password)) {
-                                $passwordDb =$user_pw['userPassword'];
+                            // Encryption key
+
+                            //Get password in database
+                            $email = $_SESSION['userNewSignIn'];
+                            $user_password_query = "SELECT userPassword FROM receipts WHERE userId = '$email'";
+                            $user_result_password = mysqli_query($db, $user_password_query);
+                            if (mysqli_num_rows($user_result_password) > 0) {
+                                while ($user_pw = mysqli_fetch_assoc($user_result_password)) {
+                                    $passwordDb = $user_pw['userPassword'];
+                                }
                             }
-                        }
-                        $decryption_key = $passwordDb;
-                        //generate with openssl_random_pseudo_bytes
+                            $decryption_key = $passwordDb;
+                            //generate with openssl_random_pseudo_bytes
 
-                        // Use openssl_decrypt() function to decrypt the data
-                        $decryption = openssl_decrypt ($encrypt_image, $cipherMethod,
-                            $decryption_key, $options, $nonce);
+                            // Use openssl_decrypt() function to decrypt the data
+                            $decryption = openssl_decrypt($encrypt_image, $cipherMethod,
+                                $decryption_key, $options, $nonce);
 
 
-                        $images[] = $decryption;
-                        $ids[] = $gallery['uploadId'];
-                        $captions[] = $gallery['uploadCaption'];
-                        $categories[] = $gallery['uploadCategory'];
+                            $images[] = $decryption;
+                            $ids[] = $gallery['uploadId'];
+                            $captions[] = $gallery['uploadCaption'];
+                            $categories[] = $gallery['uploadCategory'];
                     }
+
 
                     // Initialize column index
                     $columnIndex = 1;
