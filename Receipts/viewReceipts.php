@@ -29,7 +29,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                 <h1>Receipts</h1>
 
                 <!--                Button go back to the top-->
-                <button onclick="topFunction()" id="myBtn" title="Go to top" class="fa fa-angle-double-up"></button>
+                <button onclick="topFunction()" id="myBtn" title="Go to top" class="fa fa-angle-double-up">Top</button>
                 <script>
                     mybutton = document.getElementById("myBtn");
 
@@ -69,9 +69,13 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
                         <select name="category" id="category" title="Category" required oninvalid="setCustomValidity('Category is invalid')" oninput="setCustomValidity('')">
                             <?php
                             if(isset($_GET['categorySelect'])){
-                                if(isset($_GET['categorySelect']) != "") {?>
+                                if(isset($_GET['categorySelect']) != "") { ?>
                                     <option value="" selected hidden>-Select a Category-</option>
-                                <?php }
+                                    <?php
+                                } }else{
+                                ?>
+                                <option value="" selected hidden>-Select a Category-</option>
+                                <?php
                             }?>
                             <?php
                             if(mysqli_num_rows($upload_result_cat_name)>0){
