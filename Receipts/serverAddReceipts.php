@@ -85,7 +85,7 @@ if (isset($_POST["submitImage"])) {
 
                 // Encryption
                     // Include the encryption variables
-                    include 'cryptographyVariables.php';
+                    include '../Cryptography/cryptographyVariables.php';
 
                     // Use openssl_encrypt() function to encrypt the data
                     $encryption = openssl_encrypt($name, $cipherMethod,
