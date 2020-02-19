@@ -43,6 +43,7 @@ if (isset($_POST['reg_user_button'])) {
 
     // Register user if there are no errors in the form
     if (count($errors) == 0) {
+        // PRESENTATION
         //Hashing the password
             $salt = $email; // Initialize salt with the user email
             $saltedPassword = $salt.$password_1; // Concatenate salt and password to form plaintext
@@ -50,11 +51,11 @@ if (isset($_POST['reg_user_button'])) {
                                                                             // PASSWORD_DEFAULT is a constant that uses bcrypt algorithm (60 characters long)
                                                                             // Also, there is a salt provide in this API but I added a second salt to demonstrate the idea
                                                                             // If a user wanted to include only one custom salt they would code it the following way:
-                                                                                    //$options = [
-                                                                                    //    'salt' => "Own salt"
-                                                                                    //    'cost' => 12 // the default cost is 10
-                                                                                    //];
-                                                                                    //$hash = password_hash($password, PASSWORD_DEFAULT, $options);
+//                                                                                    $options = [
+//                                                                                        'salt' => "Own salt"
+//                                                                                        'cost' => 12 // the default cost is 10
+//                                                                                    ];
+//                                                                                    $hash = password_hash($password, PASSWORD_DEFAULT, $options);
                                                                             // *It is possible to use stronger algorithm in a more advanced project
                                                                             // **The second parameter could also be PASSWORD_BCRYPT
 

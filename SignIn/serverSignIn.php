@@ -33,6 +33,7 @@ if (!isset($_SESSION['userNewSignIn'])) {
                 array_push($errors, "Email does not exist. ");
             }
         } else {
+            // PRESENTATION
             // Verify that entered password fits the password in the database
             $salt = $email; // Insert a salt to hash
             $saltedPassword = $email . $password_1; // Concatenate the final plaintext

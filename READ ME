@@ -35,4 +35,4 @@ SECURITY IMPLEMENTATION:
                     In the viewReceipts.php page the path is only decrypt if foreign key
                         userId is the same as the connected user.
                     The method use is openssl_encrypt() or openssl_decrypt()
-
+Main hashing resource : http://www.ijircce.com/upload/2015/sacaim/30_212.pdf

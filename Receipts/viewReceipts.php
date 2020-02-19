@@ -153,6 +153,7 @@ $db = mysqli_connect('localhost', 'root', '', 'receipts');
 
                             $encrypt_image = $gallery['uploadImage']; // Store the encrypted path of the image
 
+                            // PRESENTATION
                             //Decryption
                                 // Include the decryption variables
                                 include '../Cryptography/cryptographyVariables.php';

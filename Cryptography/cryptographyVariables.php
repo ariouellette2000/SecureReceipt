@@ -1,4 +1,5 @@
 <?php
+// PRESENTATION
 // Cipher method used
 $cipherMethod = "AES-128-CTR"; // CipherMethod is the method used to encrypt and decrypt
 // AES-CTR is the counter mode for AES encryption, it XOR the text
@@ -10,13 +11,13 @@ $options = 0; // Bitwise disjunction (fast & simple) of OPENSSL_RAW_DATA and OPE
 // Initialization Nonce used later with secret key
 $nonce = '1234567891011121'; // a number that is used only once, in order to improve the security in this program, more precisely the authentication, the nonce should be random
 
-/*
- * Here is another alternative for using the nonce, but generated randomly
- * $nonce_length = openssl_cipher_iv_length($cipherMethod); // Length
- * $encryption_nonce = random_bytes($iv_length);  // Generate randomly 16 digit values
- * $decryption_nonce = random_bytes($iv_length);   // Repeat for decryption
- * // $encryption_nonce and $decryption_nonce would be in the openssl_decrypt or openssl_encrypt as the $nonce variable
- */
+//
+//  //Here is another alternative for using the nonce, but generated randomly
+//  $nonce_length = openssl_cipher_iv_length($cipherMethod); // Length
+//  $encryption_nonce = random_bytes($iv_length);  // Generate randomly 16 digit values
+//  $decryption_nonce = random_bytes($iv_length);   // Repeat for decryption
+//  // $encryption_nonce and $decryption_nonce would be in the openssl_decrypt or openssl_encrypt as the $nonce variable
+//
 
 
 //Get password (key) from database

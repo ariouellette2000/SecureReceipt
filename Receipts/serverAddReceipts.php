@@ -82,7 +82,7 @@ if (isset($_POST["submitImage"])) {
                     $fileName = $_FILES["fileToUpload"]["name"];
                     $name = "uploads/" . $fileName; //Encryption plaintext
 
-
+                // PRESENTATION
                 // Encryption
                     // Include the encryption variables
                     include '../Cryptography/cryptographyVariables.php';
